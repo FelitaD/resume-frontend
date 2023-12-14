@@ -47,7 +47,7 @@ resource "google_storage_bucket_access_control" "public_rule" {
 resource "google_compute_backend_bucket" "resume-backend-bucket" {
   name        = "resume-backend-bucket"
   description = "Contains resume website files"
-  bucket_name = google_storage_bucket.static_website.name
+  bucket_name = google_storage_bucket.static_website.id
   enable_cdn  = true
 }
 
@@ -59,43 +59,32 @@ resource "google_compute_url_map" "resume-urlmap" {
   default_service = google_compute_backend_bucket.resume-backend-bucket.id
 }
 
-# Create Network Endpoint Group
-resource "google_compute_region_network_endpoint_group" "resume-neg" {
-  name        = "resume-neg"
-  region      = var.region
-}
-
 # Setup HTTPS Load Balancer
-module "lb-http" {
-  source            = "GoogleCloudPlatform/lb-http/google//modules/serverless_negs"
+module "gce-lb-http" {
+  source            = "GoogleCloudPlatform/lb-http/google"
   version           = "~> 10.0"
 
-  name                            = "frontend-resume-lb"
+  name                            = "resume-http-lb"
   project                         = var.project
 
   ssl                             = true
   managed_ssl_certificate_domains = ["felitadonor.com"]
-  create_address                  = true # create a new IPv4 address
+  create_address                  = true # create a new global IPv4 address
   https_redirect                  = true
   load_balancing_scheme           = "EXTERNAL"
-  url_map                         = google_compute_url_map.resume-urlmap.name
+  url_map                         = google_compute_url_map.resume-urlmap.id
 
   backends = {
     default = {
+      port                            = var.service_port
       protocol                        = "HTTPS"
       port_name                       = var.service_port_name
-      enable_cdn                      = true
+      timeout_sec                     = 10
+      enable_cdn                      = false 
 
-      cdn_policy = {
-        cache_mode                   = optional(string)
-        signed_url_cache_max_age_sec = optional(string)
-        default_ttl                  = optional(number)
-        max_ttl                      = optional(number)
-        client_ttl                   = optional(number)
-        negative_caching             = optional(bool)
-        negative_caching_policy = {
-          code = optional(number)
-          ttl  = optional(number)
+      health_check = {
+        request_path                  = "/"
+        port                          = var.service_port
       }
 
       log_config = {
@@ -105,9 +94,9 @@ module "lb-http" {
 
       groups = [
         {
-          # Your serverless service should have a NEG created that's referenced here.
-          group = google_compute_region_network_endpoint_group.resume-neg.id
-        }
+          # Each node pool instance group should be added to the backend.
+          group                       = var.backend
+        },
       ]
 
       iap_config = {
