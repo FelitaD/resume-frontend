@@ -10,6 +10,8 @@ resource "google_storage_bucket" "static_website" {
   website {
     main_page_suffix = "resume.html"
   }
+  
+  force_destroy = true
 }
 
 # Upload pages to the bucket
@@ -34,24 +36,40 @@ resource "google_storage_bucket_object" "javascript" {
   bucket       = google_storage_bucket.static_website.id
 }
 
-# Make bucket public by granting allUsers READER access
+# Make bucket public
 resource "google_storage_bucket_access_control" "public_rule" {
   bucket = google_storage_bucket.static_website.id
   role   = "READER"
   entity = "allUsers"
 }
 
-# Create Load Balancing resources
+# Load Balancing resources
 
-# Create backend bucket
-resource "google_compute_backend_bucket" "resume-backend-bucket" {
-  name        = "resume-backend-bucket"
-  description = "Contains resume website files"
-  bucket_name = google_storage_bucket.static_website.id
-  enable_cdn  = true
+# Google-managed SSL certificate
+resource "google_compute_managed_ssl_certificate" "resume-ssl-cert" {
+  name     = "resume-ssl-cert"
+
+  managed {
+    domains = ["felitadonor.com"]
+  }
 }
 
-# Create URL map from hostname to backend bucket (instead of default backend service)
+# Static IPv4 address
+resource "google_compute_global_address" "resume-lb-ip" {
+  name = "resume-lb-ip"
+}
+
+# External Application Load Balancer with backend buckets
+
+# Backend bucket
+resource "google_compute_backend_bucket" "resume-backend-bucket" {
+  name        = "backend-bucket"
+  description = "Contains resume website files"
+  bucket_name = google_storage_bucket.static_website.id
+  enable_cdn  = false
+}
+
+# URL map
 resource "google_compute_url_map" "resume-urlmap" {
   name        = "resume-urlmap"
   description = "Maps resume website to backend bucket"
@@ -59,49 +77,18 @@ resource "google_compute_url_map" "resume-urlmap" {
   default_service = google_compute_backend_bucket.resume-backend-bucket.id
 }
 
-# Setup HTTPS Load Balancer
-module "gce-lb-http" {
-  source            = "GoogleCloudPlatform/lb-http/google"
-  version           = "~> 10.0"
+# HTTP target proxy
+resource "google_compute_target_http_proxy" "resume-lb-http-proxy" {
+  name    = "resume-lb-http-proxy"
+  url_map = google_compute_url_map.resume-urlmap.id
+}
 
-  name                            = "resume-http-lb"
-  project                         = var.project
-
-  ssl                             = true
-  managed_ssl_certificate_domains = ["felitadonor.com"]
-  create_address                  = true # create a new global IPv4 address
-  https_redirect                  = true
-  load_balancing_scheme           = "EXTERNAL"
-  url_map                         = google_compute_url_map.resume-urlmap.id
-
-  backends = {
-    default = {
-      port                            = var.service_port
-      protocol                        = "HTTPS"
-      port_name                       = var.service_port_name
-      timeout_sec                     = 10
-      enable_cdn                      = false 
-
-      health_check = {
-        request_path                  = "/"
-        port                          = var.service_port
-      }
-
-      log_config = {
-        enable = true
-        sample_rate = 1.0
-      }
-
-      groups = [
-        {
-          # Each node pool instance group should be added to the backend.
-          group                       = var.backend
-        },
-      ]
-
-      iap_config = {
-        enable               = false
-      }
-    }
-  }
+# Forwarding rule
+resource "google_compute_global_forwarding_rule" "resume-forwarding-rule" {
+  name                  = "resume-forwarding-rule"
+  ip_protocol           = "TCP"
+  load_balancing_scheme = "EXTERNAL_MANAGED"
+  port_range            = "80"
+  target                = google_compute_target_http_proxy.resume-lb-http-proxy.id
+  ip_address            = google_compute_global_address.resume-lb-ip.id
 }
