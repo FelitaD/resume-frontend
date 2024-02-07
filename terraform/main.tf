@@ -1,10 +1,8 @@
-# Create storage bucket for website's static files
-resource "random_id" "bucket_prefix" {
-  byte_length = 8
-}
+# Google Cloud Storage resources
 
+# Create storage bucket for website's static files
 resource "google_storage_bucket" "static_website" {
-  name          = "${random_id.bucket_prefix.hex}-static-website-bucket"
+  name          = "static-website-bucket-fd"
   location      = "EU"
   storage_class = "STANDARD"
   website {
@@ -43,7 +41,8 @@ resource "google_storage_bucket_access_control" "public_rule" {
   entity = "allUsers"
 }
 
-# Load Balancing resources
+
+# Cloud Load Balancing resources
 
 # Google-managed SSL certificate
 resource "google_compute_managed_ssl_certificate" "resume-ssl-cert" {
@@ -59,7 +58,7 @@ resource "google_compute_global_address" "resume-lb-ip" {
   name = "resume-lb-ip"
 }
 
-# External Application Load Balancer with backend buckets
+# External Application Load Balancer with backend bucket
 
 # Backend bucket
 resource "google_compute_backend_bucket" "resume-backend-bucket" {
@@ -69,7 +68,7 @@ resource "google_compute_backend_bucket" "resume-backend-bucket" {
   enable_cdn  = false
 }
 
-# URL map
+# URL map: route HTTPS requests to backend bucket
 resource "google_compute_url_map" "resume-urlmap" {
   name        = "resume-urlmap"
   description = "Maps resume website to backend bucket"
