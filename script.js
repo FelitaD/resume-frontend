@@ -12,7 +12,11 @@ document.addEventListener('DOMContentLoaded', function () {
         .then(data => {
             // Update the visitor count on the HTML page
             const visitorCountElement = document.getElementById('visitorCount');
-            visitorCountElement.textContent = data.visitorCount;
+            if (visitorCountElement) {
+                visitorCountElement.textContent = data.count;
+            } else {
+                console.error('Visitor count element not found in the HTML.');
+            }
         })
         .catch(error => {
             console.error('There was a problem with the fetch operation:', error);
