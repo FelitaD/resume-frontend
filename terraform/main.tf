@@ -44,20 +44,13 @@ resource "google_storage_bucket_object" "javascript" {
 }
 
 # Make bucket public
-# resource "google_storage_bucket_access_control" "public_rule" {
-#   bucket = google_storage_bucket.static_website.id
-#   role   = "READER"
-#   entity = "allUsers"
-# }
-
 resource "google_storage_bucket_acl" "static_website_acl" {
   bucket = google_storage_bucket.static_website.name
-
-  # Grant public-read access to all users
   role_entity = [
     "READER:allUsers",
   ] 
 }
+
 
 # Cloud Load Balancing resources
 
