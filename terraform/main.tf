@@ -65,7 +65,7 @@ resource "google_compute_backend_bucket" "resume-backend-bucket" {
   name        = "backend-bucket"
   description = "Contains resume website files"
   bucket_name = google_storage_bucket.static_website.id
-  enable_cdn  = false
+  enable_cdn  = true
 }
 
 # URL map: route HTTPS requests to backend bucket
