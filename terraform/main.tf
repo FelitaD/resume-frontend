@@ -5,11 +5,20 @@ resource "google_storage_bucket" "static_website" {
   name          = "static-website-bucket-fd"
   location      = "EU"
   storage_class = "STANDARD"
+  force_destroy = true
+
+  uniform_bucket_level_access = false
+  
   website {
     main_page_suffix = "resume.html"
   }
-  
-  force_destroy = true
+
+  cors {
+    origin          = ["https://felitadonor.com"]
+    method          = ["GET", "HEAD", "PUT", "POST", "DELETE"]
+    response_header = ["*"]
+    max_age_seconds = 3600
+  }
 }
 
 # Upload pages to the bucket
@@ -35,12 +44,26 @@ resource "google_storage_bucket_object" "javascript" {
 }
 
 # Make bucket public
+# resource "google_storage_bucket_iam_binding" "admin" {
+#   bucket = google_storage_bucket.static_website.name
+#   role = "roles/storage.admin"
+#   members = [
+#     "user:felita@felitadonor.com",
+#   ]
+# }
+
+# resource "google_storage_bucket_iam_binding" "public" {
+#   bucket = google_storage_bucket.static_website.name
+#   role = "roles/storage.objectViewer"
+#   members = [
+#     "allUsers",
+#   ]
+# }
 resource "google_storage_bucket_access_control" "public_rule" {
   bucket = google_storage_bucket.static_website.id
   role   = "READER"
   entity = "allUsers"
 }
-
 
 # Cloud Load Balancing resources
 
