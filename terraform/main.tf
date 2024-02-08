@@ -31,38 +31,32 @@ resource "google_storage_bucket_object" "html" {
 
 resource "google_storage_bucket_object" "css" {
   name         = "resume.css"
-  content      = "/Users/donor/Code/resume-challenge/resume-frontend/resume.css"
+  source      = "/Users/donor/Code/resume-challenge/resume-frontend/resume.css"
   content_type = "text/css"
   bucket       = google_storage_bucket.static_website.id
 }
 
 resource "google_storage_bucket_object" "javascript" {
   name         = "script.js"
-  content      = "/Users/donor/Code/resume-challenge/resume-frontend/script.js"
+  source      = "/Users/donor/Code/resume-challenge/resume-frontend/script.js"
   content_type = "text/javascript"
   bucket       = google_storage_bucket.static_website.id
 }
 
 # Make bucket public
-# resource "google_storage_bucket_iam_binding" "admin" {
-#   bucket = google_storage_bucket.static_website.name
-#   role = "roles/storage.admin"
-#   members = [
-#     "user:felita@felitadonor.com",
-#   ]
+# resource "google_storage_bucket_access_control" "public_rule" {
+#   bucket = google_storage_bucket.static_website.id
+#   role   = "READER"
+#   entity = "allUsers"
 # }
 
-# resource "google_storage_bucket_iam_binding" "public" {
-#   bucket = google_storage_bucket.static_website.name
-#   role = "roles/storage.objectViewer"
-#   members = [
-#     "allUsers",
-#   ]
-# }
-resource "google_storage_bucket_access_control" "public_rule" {
-  bucket = google_storage_bucket.static_website.id
-  role   = "READER"
-  entity = "allUsers"
+resource "google_storage_bucket_acl" "static_website_acl" {
+  bucket = google_storage_bucket.static_website.name
+
+  # Grant public-read access to all users
+  role_entity = [
+    "READER:allUsers",
+  ] 
 }
 
 # Cloud Load Balancing resources
