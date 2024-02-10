@@ -20,8 +20,7 @@ steps:
     terraform apply -auto-approve
   secretEnv: ['GOOGLE_CREDENTIALS']
 secrets:
-- kmsKeyName: projects/resume-404711/locations/global/keyRings/my-key-ring/cryptoKeys/my-key
-  secretEnv:
+- secretEnv:
     GOOGLE_CREDENTIALS: 'google_credentials'
 
 - id: 'tf init'
