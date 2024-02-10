@@ -9,6 +9,21 @@ steps:
       echo "$BRANCH_NAME"
       echo "***********************"
 
+- id: 'secret'
+- name: 'hashicorp/terraform:light'
+  entrypoint: 'bash'
+  args:
+  - '-c'
+  - |
+    echo $$GOOGLE_CREDENTIALS > creds.json
+    terraform init
+    terraform apply -auto-approve
+  secretEnv: ['GOOGLE_CREDENTIALS']
+secrets:
+- kmsKeyName: projects/resume-404711/locations/global/keyRings/my-key-ring/cryptoKeys/my-key
+  secretEnv:
+    GOOGLE_CREDENTIALS: 'google_credentials'
+
 - id: 'tf init'
   name: 'hashicorp/terraform:1.0.0'
   entrypoint: 'sh'
