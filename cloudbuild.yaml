@@ -9,17 +9,9 @@ steps:
       echo "$BRANCH_NAME"
       echo "***********************"
 
-- id: 'secret'
-  name: 'hashicorp/terraform:light'
-  entrypoint: 'sh'
-  args:
-  - '-c'
-  - |
-    echo $$GOOGLE_CREDENTIALS > creds.json
-  secretEnv: ['GOOGLE_CREDENTIALS']
-
 - id: 'tf init'
   name: 'hashicorp/terraform:1.0.0'
+  secretEnv: ['GOOGLE_CREDENTIALS']
   entrypoint: 'sh'
   args: 
   - '-c'
@@ -45,6 +37,7 @@ steps:
 # [START tf-plan]
 - id: 'tf plan'
   name: 'hashicorp/terraform:1.0.0'
+  secretEnv: ['GOOGLE_CREDENTIALS']
   entrypoint: 'sh'
   args: 
   - '-c'
@@ -71,6 +64,7 @@ steps:
 # [START tf-apply]
 - id: 'tf apply'
   name: 'hashicorp/terraform:1.0.0'
+  secretEnv: ['GOOGLE_CREDENTIALS']
   entrypoint: 'sh'
   args: 
   - '-c'
