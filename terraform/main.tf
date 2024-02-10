@@ -8,7 +8,7 @@ resource "google_storage_bucket" "static_website" {
   force_destroy = true
 
   uniform_bucket_level_access = false
-  
+
   website {
     main_page_suffix = "resume.html"
   }
@@ -24,21 +24,21 @@ resource "google_storage_bucket" "static_website" {
 # Upload pages to the bucket
 resource "google_storage_bucket_object" "html" {
   name         = "resume.html"
-  source      = "/Users/donor/Code/resume-challenge/resume-frontend/resume.html"
+  source       = "/Users/donor/Code/resume-challenge/resume-frontend/resume.html"
   content_type = "text/html"
   bucket       = google_storage_bucket.static_website.id
 }
 
 resource "google_storage_bucket_object" "css" {
   name         = "resume.css"
-  source      = "/Users/donor/Code/resume-challenge/resume-frontend/resume.css"
+  source       = "/Users/donor/Code/resume-challenge/resume-frontend/resume.css"
   content_type = "text/css"
   bucket       = google_storage_bucket.static_website.id
 }
 
 resource "google_storage_bucket_object" "javascript" {
   name         = "script.js"
-  source      = "/Users/donor/Code/resume-challenge/resume-frontend/script.js"
+  source       = "/Users/donor/Code/resume-challenge/resume-frontend/script.js"
   content_type = "text/javascript"
   bucket       = google_storage_bucket.static_website.id
 }
@@ -48,7 +48,7 @@ resource "google_storage_bucket_acl" "static_website_acl" {
   bucket = google_storage_bucket.static_website.name
   role_entity = [
     "READER:allUsers",
-  ] 
+  ]
 }
 
 
@@ -56,7 +56,7 @@ resource "google_storage_bucket_acl" "static_website_acl" {
 
 # Google-managed SSL certificate
 resource "google_compute_managed_ssl_certificate" "resume-ssl-cert" {
-  name     = "resume-ssl-cert"
+  name = "resume-ssl-cert"
 
   managed {
     domains = ["felitadonor.com"]
@@ -88,8 +88,8 @@ resource "google_compute_url_map" "resume-urlmap" {
 
 # HTTPS target proxy
 resource "google_compute_target_https_proxy" "resume-lb-https-proxy" {
-  name    = "resume-lb-https-proxy"
-  url_map = google_compute_url_map.resume-urlmap.id
+  name             = "resume-lb-https-proxy"
+  url_map          = google_compute_url_map.resume-urlmap.id
   ssl_certificates = [google_compute_managed_ssl_certificate.resume-ssl-cert.id]
 }
 
