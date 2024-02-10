@@ -10,7 +10,7 @@ steps:
       echo "***********************"
 
 - id: 'secret'
-- name: 'hashicorp/terraform:light'
+  name: 'hashicorp/terraform:light'
   entrypoint: 'sh'
   args:
   - '-c'
@@ -19,9 +19,9 @@ steps:
     terraform init
     terraform apply -auto-approve
   secretEnv: ['GOOGLE_CREDENTIALS']
-secrets:
-- secretEnv:
-    GOOGLE_CREDENTIALS: 'google_credentials'
+  secrets:
+  - secretEnv:
+      GOOGLE_CREDENTIALS: 'google_credentials'
 
 - id: 'tf init'
   name: 'hashicorp/terraform:1.0.0'
