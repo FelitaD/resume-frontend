@@ -1,3 +1,7 @@
+secrets:
+- secretEnv:
+    GOOGLE_CREDENTIALS: 'google_credentials'
+
 steps:
 - id: 'branch name'
   name: 'alpine'
@@ -15,13 +19,10 @@ steps:
   args:
   - '-c'
   - |
-    echo $GOOGLE_CREDENTIALS > creds.json
+    echo $$GOOGLE_CREDENTIALS > creds.json
     terraform init
     terraform apply -auto-approve
   secretEnv: ['GOOGLE_CREDENTIALS']
-  secrets:
-  - secretEnv:
-      GOOGLE_CREDENTIALS: 'google_credentials'
 
 - id: 'tf init'
   name: 'hashicorp/terraform:1.0.0'
