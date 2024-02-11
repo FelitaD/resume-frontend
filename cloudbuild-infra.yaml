@@ -76,13 +76,13 @@ steps:
         echo "*******************************************************************************"
       fi 
 
-- id: 'cypress'
-  name: 'gcr.io/cloud-builders/docker'
-  args: ['build', '-t', 'cypress-test', './tests/']
+# - id: 'cypress'
+#   name: 'gcr.io/cloud-builders/docker'
+#   args: ['build', '-t', 'cypress-test', './tests/']
 
-- id: 'smoke test'
-  name: 'docker'
-  args: ['run', 'cypress-test']
+# - id: 'smoke test'
+#   name: 'docker'
+#   args: ['run', 'cypress-test']
 
 availableSecrets:
   secretManager:

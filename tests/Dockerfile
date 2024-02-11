@@ -12,24 +12,27 @@
 # and if the copied files were the same, the image layer is cached and not recomputed
 # https://docs.docker.com/v17.09/engine/userguide/eng-image/dockerfile_best-practices/#build-cache
 # every other command like "RUN npm ci" is cached by default unless the command itself has been changed
-FROM cypress/base:10 as TEST
-WORKDIR /tests
+FROM cypress/base
+RUN npm install -g npm@6
 
 # dependencies will be installed only if the package files change
-COPY tests/package.json .
-COPY tests/package-lock.json .
+COPY package.json .
+COPY package-lock.json .
+
+RUN npm install
 
 # by setting CI environment variable we switch the Cypress install messages
 # to small "started / finished" and avoid 1000s of lines of progress messages
 # https://github.com/cypress-io/cypress/issues/1243
-ENV CI=1
-RUN npm ci
+# ENV CI=1
+# RUN ls -la
+# RUN npm ci
 
 # tests will rerun if the "cypress" folder, "cypress.json" file or "public" folder
 # has any changes
 # copy tests
-COPY tests/cypress cypress
-COPY tests/cypress.config.js .
+COPY cypress cypress
+COPY cypress.config.js .
 
 #
 # ALWAYS run e2e Cypress tests
