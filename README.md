@@ -2,7 +2,7 @@
 
 This repo uses Infrastructure as Code (Terraform) to create all resources.
 
-![diagram](diagram.png)
+![diagram](resume-challenge.svg)
 
 ## Resources
 
