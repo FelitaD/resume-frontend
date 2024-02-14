@@ -1,0 +1,17 @@
+{
+  "name": "google-cloud-build-example",
+  "version": "1.0.0",
+  "description": "Example running Cypress end-to-end tests on Google Cloud Build",
+  "main": "index.js",
+  "scripts": {
+    "test": "cypress run --spec cypress/integration/spec.js",
+    "cy:open": "cypress open --spec cypress/integration/spec.js",
+    "cy:run": "cypress run --spec cypress/integration/spec.js"
+  },
+  "devDependencies": {
+    "cypress": "3.4.1",
+    "serve": "9.6.0",
+    "start-server-and-test": "1.9.1",
+    "@bahmutov/print-env": "1.2.0"
+  }
+}
