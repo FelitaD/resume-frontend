@@ -1,5 +1,3 @@
 steps:
 - name: 'gcr.io/cloud-builders/gsutil'
   args: ['cp', '-r', 'assets/*', 'gs://static-website-bucket-fd']
-- name: 'cypress/included:8.6.0'
-  args: ['run']

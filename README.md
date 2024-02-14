@@ -14,10 +14,3 @@ Required for establishing secure connection over HTTPS.
 Handles traffic distribution, SSL encryption and decryption process, provides security features (DDoS protection and Web Application Firewall capabilities), session persistence, health checks and other features not used for this project such as scalability.
 - **DNS**<br>
 DNS Provider (Squarespace) translates Load Balancer's static IP into website's domain name. 
-
-## TODO
-
-- [ ] Create Github Actions to automatically build and deploy updates to static website with 3 steps workflow:
-    - [ ] Build step
-    - [ ] Deploy step
-    - [ ] Smoke test step
