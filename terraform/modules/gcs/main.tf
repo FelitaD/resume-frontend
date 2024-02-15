@@ -24,21 +24,21 @@ resource "google_storage_bucket" "static_website" {
 
 resource "google_storage_bucket_object" "html" {
   name         = "resume.html"
-  source       = "/Users/donor/Code/resume-challenge/resume-frontend/assets/resume.html"
+  source       = "/Users/donor/Code/resume-challenge/resume-frontend/website/resume.html"
   content_type = "text/html"
   bucket       = google_storage_bucket.static_website.name
 }
 
 resource "google_storage_bucket_object" "css" {
   name         = "resume.css"
-  source       = "/Users/donor/Code/resume-challenge/resume-frontend/assets/resume.css"
+  source       = "/Users/donor/Code/resume-challenge/resume-frontend/website/css/styles.css"
   content_type = "text/css"
   bucket       = google_storage_bucket.static_website.name
 }
 
 resource "google_storage_bucket_object" "javascript" {
   name         = "script.js"
-  source       = "/Users/donor/Code/resume-challenge/resume-frontend/assets/script.js"
+  source       = "/Users/donor/Code/resume-challenge/resume-frontend/website/js/scripts.js"
   content_type = "text/javascript"
   bucket       = google_storage_bucket.static_website.name
 }
