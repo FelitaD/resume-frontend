@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', function () {
-    const apiUrl = 'https://api-gateway-46hn0g06.nw.gateway.dev/update_visitor_count';
+    const apiUrl = 'https://resume-gateway-46hn0g06.ew.gateway.dev/update_visitor_count';
 
     // Make a CORS request using Fetch API with POST method
     fetch(apiUrl, { method: 'POST', mode: 'cors' })
