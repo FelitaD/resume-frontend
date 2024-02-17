@@ -571,6 +571,8 @@ progress {
 
 .list-inline-item {
   display: inline-block;
+  /* width: 20px;
+  height: 20px; */
 }
 .list-inline-item:not(:last-child) {
   margin-right: 0.5rem;
@@ -10942,6 +10944,11 @@ p.lead {
 
 .dev-icons {
   font-size: 3rem;
+}
+
+.responsive-img {
+  width: 3rem !important;
+  height: auto !important;
 }
 
 section.resume-section {
