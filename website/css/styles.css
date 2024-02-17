@@ -701,6 +701,10 @@ li.custom-bullet {
   flex: 1 0 0%;
 }
 
+.col-custom {
+  flex: 1 1 100%
+}
+
 .row-cols-auto > * {
   flex: 0 0 auto;
   width: auto;
@@ -10991,15 +10995,15 @@ section.resume-section .resume-section-content {
   display: none;
 }
 
-.image-grid {
+.grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr); /* Creates a 3-column layout */
-  grid-gap: 10px; /* Adjusts the gap between images */
-  /* max-width: 600px; Adjusts the maximum width of the grid */
+  grid-gap: 5vw; /* Adjusts the gap between images */
+  max-width: 100%; 
   margin: auto; /* Centers the grid horizontally */
 }
 
-.image-item img {
+.grid-item img {
   width: 100%; /* Makes images fully occupy their container */
   height: auto; /* Keeps the original aspect ratio of the images */
   display: block; /* Removes bottom margin/whitespace */
