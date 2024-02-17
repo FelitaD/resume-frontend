@@ -559,6 +559,15 @@ progress {
   }
 }
 
+li.custom-bullet {
+  list-style-type: none;
+  background-image: url('default-image.png');
+  background-repeat: no-repeat;
+  background-position: left center;
+  background-size: 20px;
+  padding-left: 30px;
+}
+
 .list-unstyled {
   padding-left: 0;
   list-style: none;
@@ -10976,4 +10985,8 @@ section.resume-section .resume-section-content {
     padding-top: 5rem;
     padding-bottom: 5rem;
   }
+}
+
+.hide-element {
+  display: none;
 }
