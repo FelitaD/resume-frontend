@@ -11011,10 +11011,9 @@ section.resume-section .resume-section-content {
   margin: auto;
 }
 
-.grid-item {
-  /* align-items: center; */
-  /* vertical-align: middle; */
+.grid-item img {
+  vertical-align: middle;
   width: 100%;
   height: auto;
-  display: block;
+  display: inline;
 }
