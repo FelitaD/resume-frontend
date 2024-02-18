@@ -10997,14 +10997,14 @@ section.resume-section .resume-section-content {
 
 .grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr); /* Creates a 3-column layout */
-  grid-gap: 5vw; /* Adjusts the gap between images */
+  grid-template-columns: repeat(4, 1fr); 
+  grid-gap: 5vw; 
   max-width: 100%; 
-  margin: auto; /* Centers the grid horizontally */
+  margin: auto;
 }
 
 .grid-item img {
-  width: 100%; /* Makes images fully occupy their container */
-  height: auto; /* Keeps the original aspect ratio of the images */
-  display: block; /* Removes bottom margin/whitespace */
+  width: 100%;
+  height: auto;
+  display: block;
 }
