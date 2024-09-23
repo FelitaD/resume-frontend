@@ -4,7 +4,7 @@ resource "google_storage_bucket" "static_website" {
   name          = "static-website-bucket-fd"
   location      = "EU"
   storage_class = "STANDARD"
-  force_destroy = true
+  force_destroy = false
 
   uniform_bucket_level_access = false
 
